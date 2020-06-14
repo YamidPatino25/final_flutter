@@ -30,4 +30,5 @@ class HomeViewModel extends BaseModel {
     authProvider.logout();
     setState(ViewState.Idle);
   }
+  
 }

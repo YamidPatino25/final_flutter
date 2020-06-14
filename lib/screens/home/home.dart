@@ -83,6 +83,7 @@ class _HomeState extends State<Home> {
                         margin: EdgeInsets.only(bottom: 15.0),
                         child: totalView(model.selectedProducts))
                     : SizedBox(),
+                    
               ]),
             ),
           ),
@@ -94,9 +95,7 @@ class _HomeState extends State<Home> {
   Widget totalView(List<SelectedProduct> products) {
     return Card(
       child: Container(
-          width: 150.0,
-          height: 50.0,
-          padding: const EdgeInsets.all(5.0),
+          
           child: Center(
             child: Text(
               '\$${total(products)}',
@@ -165,4 +164,5 @@ class _HomeState extends State<Home> {
       )),
     );
   }
+  
 }

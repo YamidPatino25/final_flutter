@@ -19,11 +19,12 @@ class MyApp extends StatelessWidget {
       create: (_) => _authProvider,
       child: MaterialApp(
           title: 'Shopping app',
+          debugShowCheckedModeBanner: false,
           home: Wrapper(),
           theme: ThemeData(
               textTheme: Theme.of(context)
                   .textTheme
-                  .apply(fontFamily: 'SanFrancisco'))),
+                  )),
     );
   }
 }
