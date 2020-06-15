@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => _authProvider,
       child: MaterialApp(
-          title: 'Shopping app',
+          title: 'App Compras',
           home: Wrapper(),
           theme: ThemeData(
               textTheme: Theme.of(context)

@@ -28,12 +28,12 @@ class _CentralState extends State<Central> {
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.person), title: Text('Amigos')),
+                icon: Icon(Icons.person), title: Text('Mi lista')),
             BottomNavigationBarItem(
                 icon: Icon(
                   Icons.shopping_cart,
                 ),
-                title: Text('Mi lista'))
+                title: Text('Amigos'))
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.white,

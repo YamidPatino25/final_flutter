@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:final_flutter/models/product.dart';
 import 'package:final_flutter/shared/constants.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 class Products extends StatefulWidget {
   @override
@@ -49,22 +52,37 @@ class _ProductsState extends State<Products> {
   }
 
   Widget listOfProducts() {
-    List<Product> products = [
-      Product(name: 'Tomato', price: 1.0),
-      Product(name: 'Pizza', price: 10.0),
-      Product(name: 'Cheese', price: 3.0),
-      Product(name: 'Apple', price: 1.0),
-    ];
-
     return Container(
-        height: 340.0,
-        child: ListView.builder(
-          itemCount: products.length,
-          itemBuilder: (context, position) {
-            var product = products[position];
-            return productCard(product);
+        height: 350,
+        // constraints: BoxConstraints.expand(),
+        child: FutureBuilder<List<Product>>(
+          future: fetchProducts(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, position) {
+                    var product = snapshot.data[position];
+                    return productCard(product);
+                  });
+            } else if (snapshot.hasError) {
+              return SizedBox();
+            }
+            return CircularProgressIndicator();
           },
         ));
+  }
+
+  Future<List<Product>> fetchProducts() async {
+    final response = await http.get('https://frutiland.herokuapp.com/search');
+    if (response.statusCode == 200) {
+      // Si el servidor devuelve una repuesta OK, parseamos el JSON
+      List responseJson = json.decode(response.body);
+      return responseJson.map((p) => Product.fromJson(p)).toList();
+    } else {
+      // Si esta respuesta no fue OK, lanza un error.
+      throw Exception('Failed to load post');
+    }
   }
 
   Widget productCard(Product product) {
@@ -73,7 +91,8 @@ class _ProductsState extends State<Products> {
       margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: ListTile(
         leading: Icon(Icons.fastfood, size: 30.0),
-        title: Row(
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Text(product.name, style: TextStyle(fontWeight: FontWeight.w500)),
             Container(
@@ -82,7 +101,7 @@ class _ProductsState extends State<Products> {
                 color: Colors.green,
                 child: Container(
                     padding: const EdgeInsets.all(5.0),
-                    child: Text('Price: \$${product.price.toString()}',
+                    child: Text('Precio: \$${product.price.toString()}',
                         style: TextStyle(color: Colors.white))),
               ),
             )

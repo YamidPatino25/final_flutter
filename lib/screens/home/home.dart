@@ -7,7 +7,6 @@ import 'package:final_flutter/base/model.dart';
 import 'package:final_flutter/base/view.dart';
 import 'package:final_flutter/models/product.dart';
 
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -37,7 +36,6 @@ class _HomeState extends State<Home> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-               
                 SelectedProduct selectedProduct = await Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) => Products()));
 
@@ -74,14 +72,7 @@ class _HomeState extends State<Home> {
                         'No hay productos',
                       ),
                 model.selectedProducts.length > 0
-                    ? Text(
-                        'Total',
-                      )
-                    : SizedBox(),
-                model.selectedProducts.length > 0
-                    ? Container(
-                        margin: EdgeInsets.only(bottom: 15.0),
-                        child: totalView(model.selectedProducts))
+                    ? bottomMenu(model)
                     : SizedBox(),
               ]),
             ),
@@ -89,6 +80,37 @@ class _HomeState extends State<Home> {
         ),
       ],
     ));
+  }
+
+  Widget bottomMenu(HomeViewModel model) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: 100.0,
+          height: 50.0,
+          child: MaterialButton(
+            elevation: 1,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            onPressed: () {
+              model.updateProductList(model.selectedProducts);
+            },
+            color: Colors.blue,
+            child: Text('Guardar'),
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            Text(
+              'Total',
+            ),
+            Container(
+                margin: EdgeInsets.only(bottom: 15.0),
+                child: totalView(model.selectedProducts)),
+          ],
+        )
+      ],
+    );
   }
 
   Widget totalView(List<SelectedProduct> products) {
@@ -113,7 +135,7 @@ class _HomeState extends State<Home> {
 
   Widget listaDeProducts(HomeViewModel model) {
     return Container(
-        height: 455.0,
+        height: 550.0,
         child: ListView.builder(
           itemCount: model.selectedProducts.length,
           itemBuilder: (context, position) {
@@ -148,16 +170,23 @@ class _HomeState extends State<Home> {
                   color: Colors.green,
                   child: Container(
                       padding: const EdgeInsets.all(5.0),
-                      child: Text('Price: \$${product.price.toString()}',
+                      child: Text('P/u: \$${product.price.toString()}',
                           style: TextStyle(color: Colors.white))),
                 ),
                 Card(
                   color: Colors.blue,
                   child: Container(
                       padding: const EdgeInsets.all(5.0),
-                      child: Text('Quantity: $quantity',
+                      child: Text('U: $quantity',
                           style: TextStyle(color: Colors.white))),
-                )
+                ),
+                Card(
+                  color: Colors.purpleAccent,
+                  child: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text('Total: \$${product.price * quantity}',
+                          style: TextStyle(color: Colors.white))),
+                ),
               ],
             ),
           ),

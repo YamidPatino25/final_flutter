@@ -22,7 +22,7 @@ class AuthService {
     }
   }
 
-  Future<User> signUp(String name, String email, String password) async {
+  Future<FirebaseUser> signUp(String name, String email, String password) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -32,9 +32,10 @@ class AuthService {
       UserUpdateInfo updateInfo = UserUpdateInfo();
       updateInfo.displayName = name;
 
-      user.updateProfile(updateInfo);
+      await user.updateProfile(updateInfo);
+      await user.reload();
 
-      return userFromFb(user);
+      return await _auth.currentUser();
     } catch (error) {
       throw error;
     }
