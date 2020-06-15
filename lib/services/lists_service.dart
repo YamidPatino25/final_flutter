@@ -5,10 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 class ListsService {
   final dbReference = Firestore.instance;
   final auth = FirebaseAuth.instance;
-
+  DocumentReference fbUserList; 
   List<SelectedProduct> userList;
 
   ListsService() {
     userList = List<SelectedProduct>();
   }
+  
 }
